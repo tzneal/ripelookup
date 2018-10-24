@@ -42,9 +42,6 @@ func DetermineServer(ip net.IP) (string, error) {
 	return "", ErrNotFound
 }
 
-// Record is a single WHOIS record for an IP Address
-type Record map[string]string
-
 // WhoisIP performs a WHOIS against a server for an IP Address, returning the matching records
 func WhoisIP(query string, server string) ([]Record, error) {
 	records := []Record{}

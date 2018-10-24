@@ -1,6 +1,7 @@
 package ripelookup_test
 
 import (
+	"fmt"
 	"net"
 	"testing"
 
@@ -26,4 +27,16 @@ func TestDetermineServer(t *testing.T) {
 			t.Errorf("expected %s, got %s", tc.Server, server)
 		}
 	}
+}
+
+func ExampleDetermineServer() {
+	server, _ := ripelookup.DetermineServer(net.ParseIP("8.8.8.8"))
+	fmt.Println(server)
+	// Output: whois.arin.net
+}
+func ExampleWhoisIP() {
+	ip := "8.8.8.8"
+	server, _ := ripelookup.DetermineServer(net.ParseIP(ip))
+	records, _ := ripelookup.WhoisIP(ip, server)
+	fmt.Println(records[0])
 }
