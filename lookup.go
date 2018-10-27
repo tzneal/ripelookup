@@ -50,13 +50,18 @@ func WhoisIP(query string, server string) ([]Record, error) {
 		return nil, err
 	}
 	defer conn.Close()
-	fmt.Fprintf(conn, "n + %s\r\n", query)
+	if strings.Index(server, "ripe.net") != -1 {
+		fmt.Fprintf(conn, "-V Md5.2 %s\r\n", query)
+	} else {
+		fmt.Fprintf(conn, "n + %s\r\n", query)
+	}
 	sc := bufio.NewScanner(conn)
 	rec := Record{}
 	const errPrefix = "%ERROR:"
 	for sc.Scan() {
 		line := sc.Text()
-		if line == "" {
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "%") || line == "" {
 			continue
 		}
 		if strings.HasPrefix(line, errPrefix) {
